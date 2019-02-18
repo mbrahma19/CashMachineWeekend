@@ -36,10 +36,6 @@ public final class AccountData {
 
     @Override
     public String toString() {
-        //return "Account id: " + id + '\n' +
-        //        "Name: " + name + '\n' +
-        //        "Email: " + email + '\n' +
-        //        "Balance: " + balance;
 
         return String.format("Account id: %d\nName: %s\nEmail: %s\nBalance: %.2f",id ,name ,email, balance);
     }

@@ -54,13 +54,29 @@ public class CashMachine {
         }
     }
 
+    public void newAccount(int id, String name, String email, double balance, String type){
+            tryCall(
+                    () ->
+                            bank.newAccount(id,name,email,balance,type),
+                    update
+            );
+    }
+
     @Override
     public String toString() {
         return accountData != null ? accountData.toString() : "Please try logging in with an existing account id.";
     }
 
-    public String withdrawToString() {
-        return accountData != null ? accountData.toString() : "Please try logging in with an existing account id.";
+    public String withdrawToString(Double amount) {
+        if(accountData != null){
+            if(accountData.getBalance() > amount){
+                return accountData.toString();
+            } else {
+
+                return "Your withdrawal amount exceeds your current balance.\nCurrent balance is " + String.format("%.2f",accountData.getBalance());
+            }
+        }
+        else {return "Please try logging in with an existing account id.";}
     }
 
     public String exitString() {

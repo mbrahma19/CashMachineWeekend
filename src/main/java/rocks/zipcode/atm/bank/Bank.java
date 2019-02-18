@@ -67,4 +67,16 @@ public class Bank {
             return ActionResult.fail("Withdraw failed: " + amount + ". Account has: " + account.getBalance());
         }
     }
+
+    public ActionResult<AccountData> newAccount(int id, String name, String email, double balance, String type) {
+        if(type.equals("Basic")){
+            Account account = accounts.put(id,new BasicAccount(new AccountData(id,name,email,balance)));
+
+            return ActionResult.success(account.getAccountData());
+        }else {
+            Account account = accounts.put(id,new PremiumAccount(new AccountData(id,name,email,balance)));
+
+            return ActionResult.success(account.getAccountData());
+        }
+    }
 }
