@@ -29,7 +29,7 @@ public class CashMachine {
         );
     }
 
-    public void deposit(int amount) {
+    public void deposit(double amount) {
         if (accountData != null) {
             tryCall(
                     () -> bank.deposit(accountData, amount),
@@ -38,7 +38,7 @@ public class CashMachine {
         }
     }
 
-    public void withdraw(int amount) {
+    public void withdraw(double amount) {
         if (accountData != null) {
             tryCall(
                     () -> bank.withdraw(accountData, amount),
@@ -49,13 +49,38 @@ public class CashMachine {
 
     public void exit() {
         if (accountData != null) {
+
             accountData = null;
         }
     }
 
+    public void newAccount(int id, String name, String email, double balance, String type){
+            tryCall(
+                    () ->
+                            bank.newAccount(id,name,email,balance,type),
+                    update
+            );
+    }
+
     @Override
     public String toString() {
-        return accountData != null ? accountData.toString() : "Try account 1000 or 2000 and click submit.";
+        return accountData != null ? accountData.toString() : "Please try logging in with an existing account id.";
+    }
+
+    public String withdrawToString(Double amount) {
+        if(accountData != null){
+            if(accountData.getBalance() > amount){
+                return accountData.toString();
+            } else {
+
+                return "Your withdrawal amount exceeds your current balance.\nCurrent balance is " + String.format("%.2f",accountData.getBalance());
+            }
+        }
+        else {return "Please try logging in with an existing account id.";}
+    }
+
+    public String exitString() {
+        return "Transactions Completed";
     }
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
