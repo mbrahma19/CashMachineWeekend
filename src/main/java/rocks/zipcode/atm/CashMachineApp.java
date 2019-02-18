@@ -1,5 +1,8 @@
 package rocks.zipcode.atm;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.text.Text;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -9,6 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
 
 /**
@@ -17,6 +22,10 @@ import javafx.scene.layout.FlowPane;
 public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
+    private TextField deposit = new TextField();
+    private TextField withdraw = new TextField();
+    private TextField exit = new TextField();
+
     private CashMachine cashMachine = new CashMachine(new Bank());
 
     private Parent createContent() {
@@ -35,7 +44,7 @@ public class CashMachineApp extends Application {
 
         Button btnDeposit = new Button("Deposit");
         btnDeposit.setOnAction(e -> {
-            int amount = Integer.parseInt(field.getText());
+            double amount = Double.parseDouble(deposit.getText());
             cashMachine.deposit(amount);
 
             areaInfo.setText(cashMachine.toString());
@@ -43,10 +52,10 @@ public class CashMachineApp extends Application {
 
         Button btnWithdraw = new Button("Withdraw");
         btnWithdraw.setOnAction(e -> {
-            int amount = Integer.parseInt(field.getText());
+            double amount = Double.parseDouble(withdraw.getText());
             cashMachine.withdraw(amount);
 
-            areaInfo.setText(cashMachine.toString());
+            areaInfo.setText(cashMachine.withdrawToString());
         });
 
         Button btnExit = new Button("Exit");
@@ -56,19 +65,60 @@ public class CashMachineApp extends Application {
             areaInfo.setText(cashMachine.toString());
         });
 
-        FlowPane flowpane = new FlowPane();
+        //FlowPane flowpane = new FlowPane();
 
-        flowpane.getChildren().add(btnSubmit);
-        flowpane.getChildren().add(btnDeposit);
-        flowpane.getChildren().add(btnWithdraw);
-        flowpane.getChildren().add(btnExit);
-        vbox.getChildren().addAll(field, flowpane, areaInfo);
+        //flowpane.getChildren().add(btnSubmit);
+        //flowpane.getChildren().add(btnDeposit);
+        //flowpane.getChildren().add(btnWithdraw);
+        //flowpane.getChildren().add(btnExit);
+        vbox.getChildren().addAll(field, btnSubmit, deposit, btnDeposit, withdraw, btnWithdraw, btnExit, areaInfo);
         return vbox;
+    }
+
+
+    private Parent createContent2() {
+        GridPane grid = new GridPane();
+        grid.setPrefSize(600, 600);
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(30);
+        grid.setVgap(30);
+
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(40);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(40);
+        grid.getColumnConstraints().addAll(column1, column2);
+
+        Button button = new Button();
+        GridPane.setRowIndex(button, 0);
+        GridPane.setColumnIndex(button, 1);
+
+
+        Button btnSubmit = new Button("Input Account ID");
+        grid.add(btnSubmit, 0, 0, 2,1);
+
+
+        Button chartTitle = new Button("Deposit");
+        grid.add(chartTitle, 0, 1);
+
+
+        Button chartSubtitle = new Button("Withdraw");
+        grid.add(chartSubtitle, 1, 1);
+
+        TextArea areaInfo = new TextArea();
+        grid.add(areaInfo,0,2,2, 1);
+
+
+        Button exit = new Button("Exit");
+        grid.add(exit, 1, 4);
+
+
+        return grid;
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(createContent()));
+        stage.setScene(new Scene(createContent2()));
         stage.show();
     }
 
