@@ -1,8 +1,6 @@
 package rocks.zipcode.atm;
 
-import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.text.Text;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -10,11 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Pos;
-import javafx.scene.layout.FlowPane;
 
 /**
  * @author ZipCodeWilmington
@@ -23,96 +19,73 @@ public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
     private TextField deposit = new TextField();
-    private TextField withdraw = new TextField();
-    private TextField exit = new TextField();
+
+    public static Button btnSubmit = new Button("Login with Account ID");
+    public static Button btnDeposit = new Button("Deposit");
+    public static Button btnWithdraw = new Button("Withdraw");
+    public static Button btnExit = new Button("Exit");
 
     private CashMachine cashMachine = new CashMachine(new Bank());
-
-    private Parent createContent() {
-        VBox vbox = new VBox(10);
-        vbox.setPrefSize(600, 600);
-
-        TextArea areaInfo = new TextArea();
-
-        Button btnSubmit = new Button("Set Account ID");
-        btnSubmit.setOnAction(e -> {
-            int id = Integer.parseInt(field.getText());
-            cashMachine.login(id);
-
-            areaInfo.setText(cashMachine.toString());
-        });
-
-        Button btnDeposit = new Button("Deposit");
-        btnDeposit.setOnAction(e -> {
-            double amount = Double.parseDouble(deposit.getText());
-            cashMachine.deposit(amount);
-
-            areaInfo.setText(cashMachine.toString());
-        });
-
-        Button btnWithdraw = new Button("Withdraw");
-        btnWithdraw.setOnAction(e -> {
-            double amount = Double.parseDouble(withdraw.getText());
-            cashMachine.withdraw(amount);
-
-            areaInfo.setText(cashMachine.withdrawToString());
-        });
-
-        Button btnExit = new Button("Exit");
-        btnExit.setOnAction(e -> {
-            cashMachine.exit();
-
-            areaInfo.setText(cashMachine.toString());
-        });
-
-        //FlowPane flowpane = new FlowPane();
-
-        //flowpane.getChildren().add(btnSubmit);
-        //flowpane.getChildren().add(btnDeposit);
-        //flowpane.getChildren().add(btnWithdraw);
-        //flowpane.getChildren().add(btnExit);
-        vbox.getChildren().addAll(field, btnSubmit, deposit, btnDeposit, withdraw, btnWithdraw, btnExit, areaInfo);
-        return vbox;
-    }
 
 
     private Parent createContent2() {
         GridPane grid = new GridPane();
         grid.setPrefSize(600, 600);
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(30);
-        grid.setVgap(30);
+        grid.setHgap(10);
+        grid.setVgap(10);
 
+        TextArea areaInfo = new TextArea();
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(40);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setPercentWidth(40);
         grid.getColumnConstraints().addAll(column1, column2);
 
-        Button button = new Button();
-        GridPane.setRowIndex(button, 0);
-        GridPane.setColumnIndex(button, 1);
 
+        grid.add(field, 0, 0, 2, 1);
+        grid.add(btnSubmit, 0, 1, 2, 1);
+        grid.add(deposit, 0, 2, 2, 1);
+        grid.add(btnDeposit, 0, 3);
+        grid.add(btnWithdraw, 1, 3);
+        grid.add(areaInfo, 0, 4, 2, 1);
+        grid.add(btnExit, 1, 6);
 
-        Button btnSubmit = new Button("Input Account ID");
-        grid.add(btnSubmit, 0, 0, 2,1);
+        btnDeposit.setDisable(true);
+        btnWithdraw.setDisable(true);
+        btnExit.setDisable(true);
 
+        btnSubmit.setOnAction(e -> {
+            int id = Integer.parseInt(field.getText());
+            cashMachine.login(id);
+            areaInfo.setText(cashMachine.toString());
 
-        Button chartTitle = new Button("Deposit");
-        grid.add(chartTitle, 0, 1);
+        });
 
+        btnDeposit.setOnAction(e -> {
+            double amount = Double.parseDouble(deposit.getText());
+            cashMachine.deposit(amount);
+            areaInfo.setText(cashMachine.toString());
+        });
 
-        Button chartSubtitle = new Button("Withdraw");
-        grid.add(chartSubtitle, 1, 1);
+        btnWithdraw.setOnAction(e -> {
+            double amount = Double.parseDouble(deposit.getText());
+            cashMachine.withdraw(amount);
 
-        TextArea areaInfo = new TextArea();
-        grid.add(areaInfo,0,2,2, 1);
+            areaInfo.setText(cashMachine.withdrawToString());
+        });
 
+        btnExit.setOnAction(e -> {
+            cashMachine.exit();
+            field.clear();
+            deposit.clear();
 
-        Button exit = new Button("Exit");
-        grid.add(exit, 1, 4);
+            areaInfo.setText(cashMachine.exitString());
 
-
+            btnDeposit.setDisable(true);
+            btnWithdraw.setDisable(true);
+            btnExit.setDisable(true);
+        });
         return grid;
     }
 

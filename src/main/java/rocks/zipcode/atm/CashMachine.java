@@ -49,17 +49,22 @@ public class CashMachine {
 
     public void exit() {
         if (accountData != null) {
+
             accountData = null;
         }
     }
 
     @Override
     public String toString() {
-        return accountData != null ? accountData.toString() : "Try account 1000 or 2000 and click submit.";
+        return accountData != null ? accountData.toString() : "Please try logging in with an existing account id.";
     }
 
     public String withdrawToString() {
-        return accountData != null ? accountData.toString() : "Try account 1000 or 2000 and click submit.";
+        return accountData != null ? accountData.toString() : "Please try logging in with an existing account id.";
+    }
+
+    public String exitString() {
+        return "Transactions Completed";
     }
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
